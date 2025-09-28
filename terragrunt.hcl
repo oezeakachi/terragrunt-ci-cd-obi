@@ -1,7 +1,7 @@
 remote_state {
   backend = "s3"
   config = {
-    bucket = "athena-OBI"
+    bucket = "athena-obi"
     region = "eu-west-1"
     key    = "${path_relative_to_include()}/terraform.tfstate"
   }
