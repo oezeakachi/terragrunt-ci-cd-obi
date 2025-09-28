@@ -17,25 +17,25 @@ resource "aws_subnet" "vpc-default-public-subnet-1" {
 }
 
 # Resource-3: Internet Gateway
-resource "aws_internet_gateway" "vpc-dev-igw" {
+resource "aws_internet_gateway" "vpc-default-igw" {
   vpc_id = aws_vpc.vpc-default.id
 }
 
 # Resource-4: Create Route Table
-resource "aws_route_table" "vpc-dev-public-route-table" {
+resource "aws_route_table" "vpc-default-public-route-table" {
   vpc_id = aws_vpc.vpc-default.id
 }
 
 # Resource-5: Create Route in Route Table for Internet Access
-resource "aws_route" "vpc-dev-public-route" {
-  route_table_id         = aws_route_table.vpc-dev-public-route-table.id
+resource "aws_route" "vpc-default-public-route" {
+  route_table_id         = aws_route_table.vpc-default-public-route-table.id
   destination_cidr_block = "0.0.0.0/0"
-  gateway_id             = aws_internet_gateway.vpc-dev-igw.id
+  gateway_id             = aws_internet_gateway.vpc-default-igw.id
 }
 
 # Resource-6: Associate the Route Table with the Subnet
-resource "aws_route_table_association" "vpc-dev-public-route-table-associate" {
-  route_table_id = aws_route_table.vpc-dev-public-route-table.id
+resource "aws_route_table_association" "vpc-default-public-route-table-associate" {
+  route_table_id = aws_route_table.vpc-default-public-route-table.id
   subnet_id      = aws_subnet.vpc-default-public-subnet-1.id
 }
 
