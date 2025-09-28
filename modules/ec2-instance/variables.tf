@@ -1,5 +1,5 @@
 variable "instance_type" {
-  description = "The instance type to use"
+  description = "The instance type to use in the dev branch"
   type        = string
 }
 variable "instance_name" {
