@@ -1,7 +1,7 @@
 # Create Security Group - SSH Traffic
 
 # Resource-1: Create VPC
-resource "aws_vpc" "vpc-dev" {
+resource "aws_vpc" "vpc-default" {
   cidr_block = "10.0.0.0/16"
   tags = {
     "Name" = "vpc-dev"
@@ -10,7 +10,7 @@ resource "aws_vpc" "vpc-dev" {
 
 # Resource-2: Create Subnets
 resource "aws_subnet" "vpc-dev-public-subnet-1" {
-  vpc_id                  = aws_vpc.vpc-dev.id
+  vpc_id                  = aws_vpc.vpc-default.id
   cidr_block              = "10.0.1.0/24"
   availability_zone       = "eu-west-1a"
   map_public_ip_on_launch = true
@@ -18,12 +18,12 @@ resource "aws_subnet" "vpc-dev-public-subnet-1" {
 
 # Resource-3: Internet Gateway
 resource "aws_internet_gateway" "vpc-dev-igw" {
-  vpc_id = aws_vpc.vpc-dev.id
+  vpc_id = aws_vpc.vpc-default.id
 }
 
 # Resource-4: Create Route Table
 resource "aws_route_table" "vpc-dev-public-route-table" {
-  vpc_id = aws_vpc.vpc-dev.id
+  vpc_id = aws_vpc.vpc-default.id
 }
 
 # Resource-5: Create Route in Route Table for Internet Access
@@ -42,7 +42,7 @@ resource "aws_route_table_association" "vpc-dev-public-route-table-associate" {
 resource "aws_security_group" "vpc-ssh" {
   name        = "vpc-ssh"
   description = "Dev VPC SSH"
-  vpc_id      = aws_vpc.vpc-dev.id
+  vpc_id      = aws_vpc.vpc-default.id
   ingress {
     description = "Allow Port 22"
     from_port   = 22
@@ -62,7 +62,7 @@ resource "aws_security_group" "vpc-ssh" {
 # Create Security Group - Web Traffic
 resource "aws_security_group" "vpc-web" {
   name        = "vpc-web"
-  vpc_id      = aws_vpc.vpc-dev.id
+  vpc_id      = aws_vpc.vpc-default.id
   description = "Dev VPC web"
   ingress {
     description = "Allow Port 80"
@@ -93,7 +93,7 @@ resource "aws_security_group" "vpc-web" {
 resource "aws_instance" "example" {
   ami           = "ami-0ae53736fc234deff"
   instance_type = var.instance_type
-   subnet_id              = aws_subnet.vpc-dev-public-subnet-1.id
+  subnet_id              = aws_subnet.vpc-dev-public-subnet-1.id
   tags = {
     Name = var.instance_name
     mysql_ip=var.db_address
